@@ -9,14 +9,32 @@ document.addEventListener('DOMContentLoaded', function(){
     funds.innerText = `$${Funds}`
 })
 
-const buyMoney = function(USD, data){
-    let exchangedValue = data.exchange_rate*USD
+function hasCurrency(currency){
+    console.log(`#${currency}`)
+    console.log(collection)
+    console.log(collection.querySelector(`#${currency}`))
+    return collection.querySelector(`#${currency}`) != null ? true : false
+}
 
-    let card = document.createElement('div')
-    card.classList.add('ownedCurrency')
-    card.innerText = `${data.country}
-    ${exchangedValue} ${data.currency}`
-    collection.append(card)
+const buyMoney = function(USD, data){
+    Funds -= USD
+    funds.innerText = `$${Funds}`
+    let exchangedValue = data.exchange_rate*USD
+    if(hasCurrency(data.currency)){
+        const card = collection.querySelector(`#${data.currency}`)
+        card.value += exchangedValue
+        card.innerText = `${data.country}
+        ${card.value} ${data.currency}`
+    }
+    else{
+        let card = document.createElement('div')
+        card.value = exchangedValue
+        card.classList.add('ownedCurrency')
+        card.id = data.currency
+        card.innerText = `${data.country}
+        ${card.value} ${data.currency}`
+        collection.append(card)
+    }
 }
 
 function createCurrencyCard(data){
