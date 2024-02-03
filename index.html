@@ -8,35 +8,36 @@
   <body>
     <div id="toy-header">
       <img
-        src="https://fontmeme.com/permalink/180719/67429e6afec53d21d64643101c43f029.png"
-        alt="toy-header"
+        src="https://www.splashlearn.com/math-vocabulary/wp-content/uploads/2022/05/image1-25.png"
+        alt="dollar-header"
+        width="450" height="200"
       />
     </div>
-
+    <p id="funds">$0</p>
     <div class="container">
-      <form class="add-toy-form">
-        <h3>Create a toy!</h3>
+      <form class="buy-currency-form">
+        <h3>Buy some money!</h3>
 
         <input
           type="text"
           name="name"
           value=""
-          placeholder="Enter a toy's name..."
+          placeholder="Enter a country's name..."
           class="input-text"
         />
         <br />
         <input
           type="text"
-          name="image"
+          name="amount"
           value=""
-          placeholder="Enter a toy's image URL..."
+          placeholder="Enter an amount to spend..."
           class="input-text"
         />
         <br />
         <input
           type="submit"
           name="submit"
-          value="Create Toy"
+          value="Buy!"
           class="submit"
         />
       </form>
@@ -45,7 +46,11 @@
       The Fed needs your help! <button id="new-toy-btn">Add a new interest rate!</button>
     </p>
 
-    <div id="toy-collection"></div>
+    <div class="row">
+      <div class="column" id="currency-collection"></div>
+      <div class="column" id="currency-list"></div>
+    </div>
+
     <script type="text/javascript" src="index.js"></script>
   </body>
 </html>

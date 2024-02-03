@@ -1,3 +1,23 @@
+.row {
+    display: flex;
+}
+  
+.column {
+    flex: 50%;
+}
+
 .currencyCard{
-    border: 2px solid chartreuse
+    border: 2px solid chartreuse;
+    width: 220px;
+    text-align: center;
+}
+
+.ownedCurrency{
+    border: 2px solid blue;
+    width: 220px;
+    text-align: center;
+}
+
+#input-text{
+    width:300px;
 }

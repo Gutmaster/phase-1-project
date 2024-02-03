@@ -1,19 +1,52 @@
-const collection = document.getElementById('toy-collection')
+const list = document.getElementById('currency-list')
+const collection = document.getElementById('currency-collection')
 const button = document.getElementById('new-toy-btn')
+const funds = document.getElementById('funds')
+let Funds = 0
+
+document.addEventListener('DOMContentLoaded', function(){
+    Funds = 100
+    funds.innerText = `$${Funds}`
+})
+
+const buyMoney = function(USD, data){
+    let exchangedValue = data.exchange_rate*USD
+
+    let card = document.createElement('div')
+    card.classList.add('ownedCurrency')
+    card.innerText = `${data.country}
+    ${exchangedValue} ${data.currency}`
+    collection.append(card)
+}
 
 function createCurrencyCard(data){
-    let card = document.createElement('div', )
+    let card = document.createElement('div',)
+    card.innerHTML =
+    `<form class="buy-currency-form">
+        <input
+        type="text"
+        value=""
+        placeholder="Amount of USD"
+        class="input-text"
+        />
+        <br />
+        <input
+        type="click"
+        name="submit"
+        value="Buy!"
+        class="submit"
+        />
+    </form>`
     card.classList.add('currencyCard')
-    console.log(card.className.style)
-    let country = document.createElement('p')
-    country.innerText = data.country
+    let button = card.querySelector('[name="submit"]')
+    button.addEventListener('click', () => buyMoney(card.querySelector(`.input-text`).value, data))
     
-    let currency = document.createElement('p')
-    currency.innerText = data.currency
-    
-    card.append(country)
-    card.append(currency)
-    collection.append(card)
+    let p = document.createElement('p')
+    p.innerText = `${data.country}
+    ${data.exchange_rate}  ${data.currency} ≈ 1 USD`
+
+    card.append(p)
+    list.append(card)
 }
 
 button.addEventListener('click', function(){
