@@ -1,3 +1,7 @@
+body{
+    background-color: olivedrab;
+}
+
 h1{
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size:xx-large;
@@ -14,29 +18,37 @@ h2{
     display: flex;
     justify-content:center;
     text-align:center;
+    border: 10px solid black;
 }
 
 .column{
     flex: 50%;
     text-align:center;
+    border: 1px solid gold;
+    background-color: goldenrod;
+}
+#second-column{
+    border: 1px solid indigo;
+    background-color: slateblue;
 }
 
 .currency-card{
     display:inline-block;
     border: 2px solid chartreuse;
-    width: 220px;
+    width: 250px;
+    background-color: olive;
 }
 
 .owned-currency{
     display:inline-block;
-    border: 2px solid blue;
-    width: 220px;
+    border: 2px solid greenyellow;
+    width: 250px;
+    background-color: green;
 }
 
 .funds{
-    border: 5px green;
     text-align: center;
-    font-size: 40px;
+    font-size: 50px;
 }
 
 .currency-search{
