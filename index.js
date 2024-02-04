@@ -2,7 +2,6 @@ const list = document.getElementById('currency-list')
 const collection = document.getElementById('currency-collection')
 const funds = document.getElementById('funds')
 const search = document.getElementById('search')
-
 let Funds = 0
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -24,20 +23,46 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 search.addEventListener('input', function(){
-    for(let i of list.children){
-        if(i.title.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase() &&
-              i.id.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase())
+    Array.from(list.children).forEach((element) => {
+        if(element.title.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase() &&
+        element.id.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase())
         {
-            console.log(i.title.slice(0, search.value.length).toLowerCase(), search.value.toLowerCase())
-            i.style = 'display:none'
+            element.style = 'display:none'
         }
         else
-            i.style = 'display:inline-block'
-    }
+            element.style = 'display:inline-block'
+    })
 })
 
 function hasCurrency(currency){
     return collection.querySelector(`#${currency}`) != null ? true : false
+}
+
+function createOwnedCurrencyCard(data, exchangedValue){
+    let card = document.createElement('div')
+    card.value = exchangedValue
+    card.classList.add('owned-currency')
+    card.id = data.currency
+    
+    let p = document.createElement('p')
+    p.innerText = `${card.value} ${data.currency} (${data.country})`
+    card.append(p)
+
+    let form = document.createElement('form')
+    let valueEntry = document.createElement('input')
+    valueEntry.placeholder = `Amount of ${card.id}`
+    valueEntry.classList.add("input-text")
+    form.append(valueEntry)
+
+    let btn = document.createElement('button')
+    btn.innerText = 'Sell'
+    form.append(btn)
+    form.addEventListener('submit', () => {
+        event.preventDefault()
+        sellMoney(valueEntry.value, data.exchange_rate, card, data)
+    })
+    card.append(form)
+    collection.append(card)
 }
 
 const buyMoney = function(USD, data){
@@ -56,29 +81,10 @@ const buyMoney = function(USD, data){
     if(hasCurrency(data.currency)){
         const card = collection.querySelector(`#${data.currency}`)
         card.value += exchangedValue
-        card.querySelector('p').innerText = `${card.value} ${data.currency}`
+        card.querySelector('p').innerText = `${card.value} ${data.currency} (${data.country})`
     }
     else{
-        let card = document.createElement('div')
-        card.value = exchangedValue
-        card.classList.add('owned-currency')
-        card.id = data.currency
-
-        let p = document.createElement('p')
-        p.innerText = `${card.value} ${data.currency}`
-        card.append(p)
-
-        let valueEntry = document.createElement('input')
-        valueEntry.placeholder = `Amount of ${card.id}`
-        valueEntry.classList.add("input-text")
-        card.append(valueEntry)
-
-        let btn = document.createElement('button')
-        btn.addEventListener('click', () => sellMoney(valueEntry.value, data.exchange_rate, card, data))
-        btn.innerText = 'Sell'
-        card.append(btn)
-
-        collection.append(card)
+        createOwnedCurrencyCard(data, exchangedValue)
     }
 }
 
@@ -98,28 +104,55 @@ const sellMoney = function(amount, rate, card, data){
     }
 }
 
+function flipCard(p, data, savedString){
+    if(p.value === "hidden"){
+        p.innerText = savedString
+        p.value = "visible"
+    }
+    else{
+        p.innerText = `(${data.record_date})`
+        p.value = 'hidden'
+    }
+}
+
 function createCurrencyCard(data){
     let card = document.createElement('div',)
     card.classList.add('currency-card')
     card.id = data.currency
     card.title = data.country
+    
+    let country = document.createElement('p')
+    country.innerText = `${data.country}`
+    card.append(country)
 
+    let span = document.createElement('span')
+    span.style = 'block'
+    let p = document.createElement('p')
+    const savedString = `1 USD ≈ ${data.exchange_rate}  ${data.currency}  `
+    p.style = "display:inline"
+    p.value = 'visible'
+    p.innerText = savedString
+    span.append(p)
+
+    let flipButton = document.createElement('button')
+    flipButton.innerText = "?"
+    flipButton.addEventListener('click', () => {flipCard(p, data, savedString)})
+    span.append(flipButton)
+    card.append(span)
+
+    let form = document.createElement('form')
+    form.append(document.createElement('br'))
     let valueEntry = document.createElement('input')
-    valueEntry.placeholder = "Amount of USD"
-    valueEntry.classList.add("input-text")
-    card.append(valueEntry)
-
+    valueEntry.placeholder = "Amount if USD"
+    form.append(valueEntry)
     let buyButton = document.createElement('button')
     buyButton.innerText = "Buy!"
-    buyButton.addEventListener('click', () => {
-        buyMoney(card.querySelector(`.input-text`).value, data)
+    form.append(buyButton)
+    form.addEventListener('submit', () => {
+        event.preventDefault()
+        buyMoney(valueEntry.value, data)
     })
-    card.append(buyButton)
-
-    let p = document.createElement('p')
-    p.innerText = `${data.country}
-    1 USD ≈ ${data.exchange_rate}  ${data.currency}`
-    card.append(p)
+    card.append(form)
 
     list.append(card)
 }
