@@ -108,13 +108,13 @@ const sellMoney = function(amount, rate, card, data){
     }
 }
 
-function flipCard(p, data, savedString){
+function flipCard(p, data, savedString, savedString2){
     if(p.value === "hidden"){
         p.innerText = savedString
         p.value = "visible"
     }
     else{
-        p.innerText = `(${data.country_currency_desc})`
+        p.innerText = savedString2
         p.value = 'hidden'
     }
 }
@@ -133,6 +133,8 @@ function createCurrencyCard(data){
     span.style = 'block'
     let p = document.createElement('p')
     const savedString = `1 USD ≈ ${data.exchange_rate}  ${data.currency}  `
+    const inverseExchange = Math.round(10000000000*(1/data.exchange_rate))/10000000000
+    const savedString2 = `1 ${data.currency} = ${inverseExchange} USD`
     p.style = "display:inline"
     p.value = 'visible'
     p.innerText = savedString
@@ -140,7 +142,7 @@ function createCurrencyCard(data){
 
     let flipButton = document.createElement('button')
     flipButton.innerText = "?"
-    flipButton.addEventListener('click', () => {flipCard(p, data, savedString)})
+    flipButton.addEventListener('click', () => {flipCard(p, data, savedString, savedString2)})
     span.append(flipButton)
     card.append(span)
 
