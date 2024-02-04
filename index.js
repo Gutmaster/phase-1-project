@@ -8,7 +8,6 @@ let Funds = 0
 document.addEventListener('DOMContentLoaded', function(){
     Funds = 100
     funds.innerText = `$${Funds}`
-    console.log('LAOD')
     return fetch("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange")
     .then(function(response){
         return response.json();
@@ -57,8 +56,7 @@ const buyMoney = function(USD, data){
     if(hasCurrency(data.currency)){
         const card = collection.querySelector(`#${data.currency}`)
         card.value += exchangedValue
-        card.querySelector('p').innerText = `${data.country}
-        ${card.value} ${data.currency}`
+        card.querySelector('p').innerText = `${card.value} ${data.currency}`
     }
     else{
         let card = document.createElement('div')
@@ -67,12 +65,16 @@ const buyMoney = function(USD, data){
         card.id = data.currency
 
         let p = document.createElement('p')
-        p.innerText = `${data.country}
-        ${card.value} ${data.currency}  `
+        p.innerText = `${card.value} ${data.currency}`
         card.append(p)
 
+        let valueEntry = document.createElement('input')
+        valueEntry.placeholder = `Amount of ${card.id}`
+        valueEntry.classList.add("input-text")
+        card.append(valueEntry)
+
         let btn = document.createElement('button')
-        btn.addEventListener('click', () => sellMoney(card.value, data.exchange_rate, card))
+        btn.addEventListener('click', () => sellMoney(valueEntry.value, data.exchange_rate, card, data))
         btn.innerText = 'Sell'
         card.append(btn)
 
@@ -80,10 +82,20 @@ const buyMoney = function(USD, data){
     }
 }
 
-const sellMoney = function(amount, rate, card){
+const sellMoney = function(amount, rate, card, data){
+    if(amount > card.value){
+        alert('Not enough funds to sell!')
+        return
+    }
     Funds += amount/rate
     funds.innerText = `$${Funds}`
-    card.remove()
+
+    card.value -= amount
+    if(card.value <= 0)
+        card.remove()
+    else{
+        card.querySelector('p').innerText = `${card.value} ${data.currency}`
+    }
 }
 
 function createCurrencyCard(data){
@@ -100,14 +112,13 @@ function createCurrencyCard(data){
     let buyButton = document.createElement('button')
     buyButton.innerText = "Buy!"
     buyButton.addEventListener('click', () => {
-
         buyMoney(card.querySelector(`.input-text`).value, data)
     })
     card.append(buyButton)
 
     let p = document.createElement('p')
     p.innerText = `${data.country}
-    ${data.exchange_rate}  ${data.currency} ≈ 1 USD`
+    1 USD ≈ ${data.exchange_rate}  ${data.currency}`
     card.append(p)
 
     list.append(card)

@@ -1,9 +1,21 @@
+h1{
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size:xx-large;
+    text-align:center;
+}
+
+h2{
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size:xx-large;
+    text-align:center;
+}
+
 .row{
     display: flex;
     justify-content:center;
     text-align:center;
 }
-  
+
 .column{
     flex: 50%;
     text-align:center;
@@ -24,6 +36,7 @@
 .funds{
     border: 5px green;
     text-align: center;
+    font-size: 40px;
 }
 
 .currency-search{
