@@ -8,7 +8,7 @@ let Funds = 0
 document.addEventListener('DOMContentLoaded', function(){
     Funds = 100
     funds.innerText = `$${Funds}`
-
+    console.log('LAOD')
     return fetch("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange")
     .then(function(response){
         return response.json();
@@ -27,10 +27,13 @@ document.addEventListener('DOMContentLoaded', function(){
 search.addEventListener('input', function(){
     for(let i of list.children){
         if(i.title.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase() &&
-        i.id.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase())
-            i.hidden = true
+              i.id.slice(0, search.value.length).toLowerCase() !== search.value.toLowerCase())
+        {
+            console.log(i.title.slice(0, search.value.length).toLowerCase(), search.value.toLowerCase())
+            i.style = 'display:none'
+        }
         else
-            i.hidden = false
+            i.style = 'display:inline-block'
     }
 })
 
