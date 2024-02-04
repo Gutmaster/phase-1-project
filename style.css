@@ -1,20 +1,34 @@
-.row {
+.row{
     display: flex;
 }
   
-.column {
+.column{
     flex: 50%;
 }
 
-.currencyCard{
+.currency-card{
     border: 2px solid chartreuse;
     width: 220px;
     text-align: center;
 }
 
-.ownedCurrency{
+.owned-currency{
     border: 2px solid blue;
     width: 220px;
+    text-align: center;
+}
+
+.funds{
+    border: 5px green;
+    text-align: center;
+}
+
+.currency-search{
+    border: 5px green;
+    text-align: center;
+}
+
+#dollar-header{
     text-align: center;
 }
 

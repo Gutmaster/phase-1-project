@@ -6,6 +6,9 @@ const search = document.getElementById('search')
 let Funds = 0
 
 document.addEventListener('DOMContentLoaded', function(){
+    Funds = 100
+    funds.innerText = `$${Funds}`
+
     return fetch("https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange")
     .then(function(response){
         return response.json();
@@ -17,14 +20,8 @@ document.addEventListener('DOMContentLoaded', function(){
     })
     .catch(function (error) {
         console.log("Error message:", error.message);
-        let p = document.createElement('p');
-        p = error.message;
-        console.log(p);
-        document.querySelector('body').append(p);
+        alert(error.message);
     });
-
-    Funds = 100
-    funds.innerText = `$${Funds}`
 })
 
 search.addEventListener('input', function(){
@@ -38,19 +35,20 @@ search.addEventListener('input', function(){
 })
 
 function hasCurrency(currency){
-    console.log(`#${currency}`)
-    console.log(collection)
-    console.log(collection.querySelector(`#${currency}`))
     return collection.querySelector(`#${currency}`) != null ? true : false
 }
 
 const buyMoney = function(USD, data){
     if(USD === 0 || isNaN(USD))
         return
+    else if(USD > Funds){
+        alert("Insufficient funds!")
+        return
+    }
     Funds -= USD
     funds.innerText = `$${Funds}`
     let exchangedValue = data.exchange_rate*USD
-    console.log(Number(USD))
+
     if(hasCurrency(data.currency)){
         const card = collection.querySelector(`#${data.currency}`)
         card.value += exchangedValue
@@ -59,13 +57,23 @@ const buyMoney = function(USD, data){
     }
     else{
         let card = document.createElement('div')
+        let btn = document.createElement('button')
+        btn.addEventListener('click', () => sellMoney(exchangedValue, data.exchange_rate, card))
+        btn.innerText = 'Sell'
         card.value = exchangedValue
-        card.classList.add('ownedCurrency')
+        card.classList.add('owned-currency')
         card.id = data.currency
         card.innerText = `${data.country}
-        ${card.value} ${data.currency}`
+        ${card.value} ${data.currency}  `
+        card.append(btn)
         collection.append(card)
     }
+}
+
+const sellMoney = function(amount, rate, card){
+    Funds += amount/rate
+    funds.innerText = `$${Funds}`
+    card.remove()
 }
 
 function createCurrencyCard(data){
@@ -86,7 +94,7 @@ function createCurrencyCard(data){
         class="submit"
         />
     </form>`
-    card.classList.add('currencyCard')
+    card.classList.add('currency-card')
     card.id = data.currency
     card.title = data.country
     let button = card.querySelector('[name="submit"]')
