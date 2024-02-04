@@ -39,8 +39,10 @@ function hasCurrency(currency){
 }
 
 const buyMoney = function(USD, data){
-    if(USD === 0 || isNaN(USD))
+    if(USD === 0 || isNaN(USD)){
+        alert("Please enter an amount in USD.")
         return
+    }
     else if(USD > Funds){
         alert("Insufficient funds!")
         return
@@ -52,20 +54,25 @@ const buyMoney = function(USD, data){
     if(hasCurrency(data.currency)){
         const card = collection.querySelector(`#${data.currency}`)
         card.value += exchangedValue
-        card.innerText = `${data.country}
+        card.querySelector('p').innerText = `${data.country}
         ${card.value} ${data.currency}`
     }
     else{
         let card = document.createElement('div')
-        let btn = document.createElement('button')
-        btn.addEventListener('click', () => sellMoney(exchangedValue, data.exchange_rate, card))
-        btn.innerText = 'Sell'
         card.value = exchangedValue
         card.classList.add('owned-currency')
         card.id = data.currency
-        card.innerText = `${data.country}
+
+        let p = document.createElement('p')
+        p.innerText = `${data.country}
         ${card.value} ${data.currency}  `
+        card.append(p)
+
+        let btn = document.createElement('button')
+        btn.addEventListener('click', () => sellMoney(card.value, data.exchange_rate, card))
+        btn.innerText = 'Sell'
         card.append(btn)
+
         collection.append(card)
     }
 }
@@ -78,32 +85,27 @@ const sellMoney = function(amount, rate, card){
 
 function createCurrencyCard(data){
     let card = document.createElement('div',)
-    card.innerHTML =
-    `<form class="buy-currency-form">
-        <input
-        type="text"
-        value=""
-        placeholder="Amount of USD"
-        class="input-text"
-        />
-        <br />
-        <input
-        type="click"
-        name="submit"
-        value="Buy!"
-        class="submit"
-        />
-    </form>`
     card.classList.add('currency-card')
     card.id = data.currency
     card.title = data.country
-    let button = card.querySelector('[name="submit"]')
-    button.addEventListener('click', () => buyMoney(card.querySelector(`.input-text`).value, data))
-    
+
+    let valueEntry = document.createElement('input')
+    valueEntry.placeholder = "Amount of USD"
+    valueEntry.classList.add("input-text")
+    card.append(valueEntry)
+
+    let buyButton = document.createElement('button')
+    buyButton.innerText = "Buy!"
+    buyButton.addEventListener('click', () => {
+
+        buyMoney(card.querySelector(`.input-text`).value, data)
+    })
+    card.append(buyButton)
+
     let p = document.createElement('p')
     p.innerText = `${data.country}
     ${data.exchange_rate}  ${data.currency} ≈ 1 USD`
-
     card.append(p)
+
     list.append(card)
 }

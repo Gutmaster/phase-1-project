@@ -1,21 +1,23 @@
 .row{
     display: flex;
+    justify-content:center;
+    text-align:center;
 }
   
 .column{
     flex: 50%;
+    text-align:center;
 }
 
 .currency-card{
+    display:inline-block;
     border: 2px solid chartreuse;
     width: 220px;
-    text-align: center;
 }
 
 .owned-currency{
     border: 2px solid blue;
     width: 220px;
-    text-align: center;
 }
 
 .funds{
