@@ -70,8 +70,8 @@ function createOwnedCurrencyCard(data, exchangedValue){
 }
 
 const buyMoney = function(USD, data){
-    if(USD === 0 || isNaN(USD)){
-        alert("Please enter an amount in USD.")
+    if(USD <= 0 || isNaN(USD)){
+        alert("Please enter a positive amount in USD.")
         return
     }
     else if(USD > Funds){
@@ -93,6 +93,10 @@ const buyMoney = function(USD, data){
 }
 
 const sellMoney = function(amount, rate, card, data){
+    if(amount <= 0 || isNaN(amount)){
+        alert(`Please enter a positive amount in ${data.currency}.`)
+        return
+    }
     if(amount > card.value){
         alert('Not enough funds to sell!')
         return
